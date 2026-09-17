@@ -43,8 +43,8 @@ const char* PASSCODE = "17814";
 const char* LATITUDE  = "1447.03N";
 const char* LONGITUDE = "10040.63E";
 
-const char* COMMENT_BASE = "INDY  WX API";
-const char* SOFTWARE_ID  = "wxESP";
+const char* COMMENT_BASE = "145.6625MHz dup-  ASL node 61780";
+const char* SOFTWARE_ID  = "INDY";
 
 const unsigned long BEACON_INTERVAL_MS = 60UL * 1000UL;
 
