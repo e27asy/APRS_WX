@@ -55,7 +55,7 @@ const char* WX_LAT = "14.7995";
 
 const char* WX_LON = "100.6534";
 
-const char* WAPI_KEY = "e2cea38743f84cb582245116261709";
+const char* WAPI_KEY = "d367330e62844716b2860956261709";
 
 const unsigned long WEATHER_INTERVAL_MS = 5UL  * 60UL * 1000UL;
 const unsigned long OM_COOLDOWN_MS      = 30UL * 60UL * 1000UL;
@@ -233,7 +233,13 @@ bool fetchOpenMeteo()
   String payload;
   if (!httpGetString(url, payload)) return false;
 
-  StaticJsonDocument<384> filter;
+  JsonDocument filter;
+ //StaticJsonDocument<384> filter;
+
+
+
+
+
   filter["current"]["temperature_2m"]       = true;
   filter["current"]["relative_humidity_2m"] = true;
   filter["current"]["pressure_msl"]         = true;
@@ -244,7 +250,9 @@ bool fetchOpenMeteo()
   filter["current"]["weather_code"]         = true;
   filter["daily"]["precipitation_sum"]      = true;
 
-  DynamicJsonDocument doc(1024);
+ // DynamicJsonDocument doc(1024);
+ JsonDocument doc;
+
   DeserializationError err =
       deserializeJson(doc, payload, DeserializationOption::Filter(filter));
   if (err) {
@@ -287,7 +295,7 @@ bool fetchWeatherAPI()
   Serial.println("[WX] Trying WeatherAPI.com ...");
 
   if (strlen(WAPI_KEY) < 10 ||
-      strcmp(WAPI_KEY, "PUT_YOUR_WEATHERAPI_KEY_HERE") == 0) {
+      strcmp(WAPI_KEY, "PUT WeatherAPI key") == 0) {
     Serial.println("  WeatherAPI key not set. Skipped.");
     return false;
   }
@@ -300,8 +308,11 @@ bool fetchWeatherAPI()
   String payload;
   if (!httpGetString(url, payload)) return false;
 
-  StaticJsonDocument<512> filter;
-  JsonObject fc = filter.createNestedObject("current");
+  JsonDocument filter;
+  //JsonObject fc = filter.createNestedObject("current");
+  JsonObject fc = filter["current"].to<JsonObject>();
+
+
   fc["temp_c"]      = true;
   fc["temp_f"]      = true;
   fc["humidity"]    = true;
@@ -314,7 +325,8 @@ bool fetchWeatherAPI()
   fc["condition"]["text"] = true;
   filter["forecast"]["forecastday"][0]["day"]["totalprecip_in"] = true;
 
-  DynamicJsonDocument doc(1536);
+  //DynamicJsonDocument doc(1536);
+  JsonDocument doc;
   DeserializationError err =
       deserializeJson(doc, payload, DeserializationOption::Filter(filter));
   if (err) {
@@ -697,7 +709,7 @@ void oledInit()
   display.clearDisplay();
   drawHeaderBar("ESP32 APRS WX");
   drawCentered(String(CALLSIGN), 20, fitTextSize(String(CALLSIGN), 3));
-  drawCentered("v2.3 booting...", 50, 1);
+  drawCentered("v1.0 booting...", 50, 1);
   display.display();
   delay(1200);
 }
@@ -723,7 +735,7 @@ void oledPageStatus()
 void oledPageWeather()
 {
   bool stale = (wxValid && wxIsStale());
-  drawHeaderBar("LAK SI WX", stale);
+  drawHeaderBar("WX", stale);
 
   if (!wxValid) {
     drawCentered("NO DATA", 28, 2);
@@ -818,7 +830,7 @@ void setup()
   oledInit();
 
   Serial.println();
-  Serial.println("ESP32 APRS WX Beacon v2.3 (Lak Si) Starting");
+  Serial.println("Indy ESP32 APRS WX Beacon v1.0 Starting");
 
   connectWiFi();
 
