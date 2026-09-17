@@ -28,13 +28,13 @@
 // =====================
 // Wi-Fi Configuration
 // =====================
-const char* WIFI_SSID     = "e27cyf_2.4GHz";
-const char* WIFI_PASSWORD = "0896066266";
+const char* WIFI_SSID     = "xxxxxxx";
+const char* WIFI_PASSWORD = "xxxxxxx";
 
 // =====================
 // APRS Configuration
 // =====================
-const char* APRS_SERVER = "asia.aprs2.net";
+const char* APRS_SERVER = "aprs.aprsindy.org";
 const int   APRS_PORT   = 14580;
 
 const char* CALLSIGN = "E24FG";
@@ -510,7 +510,7 @@ String buildWeatherPacket()
   String ts = zuluTimestamp();
 
   String p = CALLSIGN;
-  p += ">APRS,TCPIP*:";
+  p += ">WESPX,TCPIP*:";
 
   if (ts.length() > 0) { p += "@"; p += ts; }
   else                 { p += "!"; }
@@ -552,7 +552,7 @@ String buildPositionPacket()
   if (c.length() > 180) c = c.substring(0, 180);
 
   String p = CALLSIGN;
-  p += ">APRS,TCPIP*:=";
+  p += ">WESPX,TCPIP*:=";
   p += LATITUDE;
   p += "/";
   p += LONGITUDE;
@@ -589,7 +589,7 @@ bool sendAprsBeacon()
 
   String login = "user ";
   login += CALLSIGN; login += " pass "; login += PASSCODE;
-  login += " vers ESP32WxBeacon 2.3\r\n";
+  login += "Indy ESP32WxBeacon 1.0\r\n";
   Serial.print("Login: "); Serial.print(login);
   client.print(login);
 
