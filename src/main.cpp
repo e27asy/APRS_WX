@@ -28,8 +28,8 @@
 // =====================
 // Wi-Fi Configuration
 // =====================
-const char* WIFI_SSID     = "xxxxxxx";
-const char* WIFI_PASSWORD = "xxxxxxx";
+const char* WIFI_SSID     = "HS1AL";
+const char* WIFI_PASSWORD = "N@0896071707";
 
 // =====================
 // APRS Configuration
@@ -40,8 +40,8 @@ const int   APRS_PORT   = 14580;
 const char* CALLSIGN = "E24FG";
 const char* PASSCODE = "17814";
 
-const char* LATITUDE  = "1447.03N";
-const char* LONGITUDE = "10040.63E";
+const char* LATITUDE  = "1447.02N";
+const char* LONGITUDE = "10040.66E";
 
 const char* COMMENT_BASE = "145.6625MHz dup-  ASL node 61780";
 const char* SOFTWARE_ID  = "INDY";
@@ -55,7 +55,7 @@ const char* WX_LAT = "14.7995";
 
 const char* WX_LON = "100.6534";
 
-const char* WAPI_KEY = "d367330e62844716b2860956261709";
+const char* WAPI_KEY = "d51bcb5075b7420296e75819260310";
 
 const unsigned long WEATHER_INTERVAL_MS = 5UL  * 60UL * 1000UL;
 const unsigned long OM_COOLDOWN_MS      = 30UL * 60UL * 1000UL;
@@ -187,16 +187,16 @@ bool httpGetString(const String& url, String& out)
 static const char* wmoToText(int code)
 {
   switch (code) {
-    case 0:  return "Clear";
-    case 1:  return "Mostly Clear";
-    case 2:  return "Partly Cloudy";
-    case 3:  return "Overcast";
-    case 45: case 48:            return "Fog";
-    case 51: case 53: case 55:   return "Drizzle";
-    case 56: case 57:            return "Freezing Drizzle";
-    case 61:                     return "Light Rain";
-    case 63:                     return "Rain";
-    case 65:                     return "Heavy Rain";
+    case 0:  return "ท้องฟ้าโปร่ง";
+    case 1:  return "ท้องฟ้าโปร่งเป็นส่วนใหญ่";
+    case 2:  return "มีเมฆบางส่วน";
+    case 3:  return "ท้องฟ้ามืดครึ้ม";
+    case 45: case 48:            return "หมอก";
+    case 51: case 53: case 55:   return "ฝนปรอย";
+    case 56: case 57:            return "ละอองฝน";
+    case 61:                     return "ฝนตกปรอยๆ";
+    case 63:                     return "ฝนตก";
+    case 65:                     return "ฝนตกหนัก";
     case 66: case 67:            return "Freezing Rain";
     case 71: case 73: case 75:   return "Snow";
     case 77:                     return "Snow Grains";
@@ -204,8 +204,8 @@ static const char* wmoToText(int code)
     case 81:                     return "Showers";
     case 82:                     return "Heavy Showers";
     case 85: case 86:            return "Snow Showers";
-    case 95:                     return "Thunderstorm";
-    case 96: case 99:            return "Thunderstorm Hail";
+    case 95:                     return "พายุฝนฟ้าคะนอง";
+    case 96: case 99:            return "พายุฝนฟ้าคะนองและลูกเห็บ";
     default:                     return "N/A";
   }
 }
@@ -234,12 +234,7 @@ bool fetchOpenMeteo()
   if (!httpGetString(url, payload)) return false;
 
   JsonDocument filter;
- //StaticJsonDocument<384> filter;
-
-
-
-
-
+ 
   filter["current"]["temperature_2m"]       = true;
   filter["current"]["relative_humidity_2m"] = true;
   filter["current"]["pressure_msl"]         = true;
@@ -250,7 +245,7 @@ bool fetchOpenMeteo()
   filter["current"]["weather_code"]         = true;
   filter["daily"]["precipitation_sum"]      = true;
 
- // DynamicJsonDocument doc(1024);
+
  JsonDocument doc;
 
   DeserializationError err =
@@ -309,7 +304,6 @@ bool fetchWeatherAPI()
   if (!httpGetString(url, payload)) return false;
 
   JsonDocument filter;
-  //JsonObject fc = filter.createNestedObject("current");
   JsonObject fc = filter["current"].to<JsonObject>();
 
 
@@ -325,7 +319,6 @@ bool fetchWeatherAPI()
   fc["condition"]["text"] = true;
   filter["forecast"]["forecastday"][0]["day"]["totalprecip_in"] = true;
 
-  //DynamicJsonDocument doc(1536);
   JsonDocument doc;
   DeserializationError err =
       deserializeJson(doc, payload, DeserializationOption::Filter(filter));
