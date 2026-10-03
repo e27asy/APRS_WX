@@ -28,8 +28,8 @@
 // =====================
 // Wi-Fi Configuration
 // =====================
-const char* WIFI_SSID     = "HS1AL";
-const char* WIFI_PASSWORD = "N@0896071707";
+const char* WIFI_SSID     = "xxxxxx";
+const char* WIFI_PASSWORD = "xxxxxx";
 
 // =====================
 // APRS Configuration
